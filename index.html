@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Love Sanctuary</title>
+    <link rel="stylesheet" href="styles.css">
+    <script type="module" src="script.js" defer></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to Our Love Sanctuary</h1>
+        <div id="pin-container">
+            <input type="password" id="pin" placeholder="Enter PIN" />
+            <button id="submit-pin">Enter</button>
+        </div>
+        <div id="content" style="display: none;">
+            <h2>Upload Your Memories</h2>
+            <input type="file" id="fileInput" />
+            <textarea id="messageInput" placeholder="Type your message or quote here..."></textarea>
+            <button id="uploadButton">Upload File</button>
+            <button id="saveMessageButton">Save Message</button>
+            <h3>Your Uploaded Files:</h3>
+            <div id="fileList"></div>
+            <h3>Your Messages:</h3>
+            <div id="messageList"></div>
+            <h3>Ask a Question:</h3>
+            <input type="text" id="questionInput" placeholder="Type your question here..." />
+            <button id="askQuestionButton">Ask</button>
+            <div id="questionList"></div>
+            <h3>Favorite Quotes:</h3>
+            <div id="quotes">
+                <div class="quote" id="sharleensQuote">“We would be together and have our books and at night be warm in bed together with windows open and the stars bright.”</div>
+                <div class="quote" id="briansQuote">“...You freed me from the cage but put shackles on me with your own hands... shackles of love and tenderness💕💕.”</div>
+            </div>
+            <h3>Instagram Links:</h3>
+            <div class="instagram-links">
+                <a href="https://www.instagram.com/brian_wachiye/?__pwa=1#" target="_blank">Brian's Instagram</a>
+                <a href="https://www.instagram.com/its_sharny/?__pwa=1#" target="_blank">Sharleen's Instagram</a>
+            </div>
+            <div id="calendar"></div>
+            <div id="digitalClock"></div>
+        </div>
+        <footer>
+            <p>&copy; 2024 Brian and Sharleen. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>
