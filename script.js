@@ -1,69 +1,110 @@
 // Import Firebase functions
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
-import { getStorage, ref, uploadBytes, listAll } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-storage.js";
-import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
+import { getStorage, ref, uploadBytes, deleteObject, listAll, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-storage.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
+import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
 
-// Your Firebase configuration
+// Firebase config and initialization
 const firebaseConfig = {
-    apiKey: "AIzaSyBqug40sGykkuv9G93grQ6WRVqz6gAPrNo",
-    authDomain: "sharn-and-brian.firebaseapp.com",
-    projectId: "sharn-and-brian",
-    storageBucket: "sharn-and-brian.appspot.com",
-    messagingSenderId: "1019310104584",
-    appId: "1:1019310104584:web:f44a5b9d8f921838cf31bd",
-    measurementId: "G-9WS245DOP2"
+    apiKey: "AIzaSyDCY8rufFnmvmvW5QMF989chBEZbF6ytOg",
+    authDomain: "myapp-32598.firebaseapp.com",
+    projectId: "myapp-32598",
+    storageBucket: "myapp-32598.appspot.com",
+    messagingSenderId: "349027005",
+    appId: "1:349027005:web:3c3e13461b93aa3b9355d4",
+    measurementId: "G-K9X4PVX4C7"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const storage = getStorage(app);
 const auth = getAuth(app);
+const db = getFirestore(app);
 
-// Pin functionality
 document.getElementById('submit-pin').onclick = function() {
     const pin = document.getElementById('pin').value;
     if (pin === '2005') {
-        document.getElementById('content').style.display = 'block';
         document.getElementById('pin-container').style.display = 'none';
-        fetchFiles(); 
-        loadMessages();
-        loadQuestions();
-        setInterval(updateClock, 1000); 
-        displayCalendar(); 
+        document.getElementById('auth-container').style.display = 'block';
     } else {
         alert('Incorrect PIN. Please try again.');
     }
 };
 
-// File upload functionality
-document.getElementById('uploadButton').onclick = function() {
+document.getElementById('login-button').onclick = async function() {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    try {
+        await signInWithEmailAndPassword(auth, email, password);
+        document.getElementById('auth-container').style.display = 'none';
+        document.getElementById('content').style.display = 'block';
+        fetchFiles();
+        loadMessages();
+        updateClock();
+        displayCalendar();
+        displayLocation();
+    } catch (error) {
+        alert("Authentication failed: " + error.message);
+    }
+};
+
+// File upload, delete, and fetch functions
+document.getElementById('uploadButton').onclick = async function() {
     const fileInput = document.getElementById('fileInput');
     const file = fileInput.files[0];
     if (file) {
         const storageRef = ref(storage, 'uploads/' + file.name);
-        uploadBytes(storageRef, file).then(() => {
-            alert('File uploaded successfully!');
-            fetchFiles(); 
-        }).catch((error) => {
-            alert('Error uploading file: ' + error.message);
-        });
-    } else {
-        alert('Please select a file to upload.');
+        await uploadBytes(storageRef, file);
+        alert('File uploaded successfully!');
+        fetchFiles();
     }
 };
 
-// Digital clock function
-function updateClock() {
-    const now = new Date();
-    const options = { timeZone: 'Africa/Nairobi', hour: '2-digit', minute: '2-digit', second: '2-digit' };
-    const timeString = now.toLocaleTimeString('en-US', options);
-    document.getElementById('digitalClock').innerText = timeString;
+// Message saving and loading
+document.getElementById('saveMessageButton').onclick = async function() {
+    const message = document.getElementById('messageInput').value;
+    if (message) {
+        await addDoc(collection(db, "messages"), {
+            text: message,
+            timestamp: new Date()
+        });
+        document.getElementById('messageInput').value = '';
+        loadMessages();
+    }
+};
+
+async function loadMessages() {
+    const messagesSnapshot = await getDocs(collection(db, "messages"));
+    const messageList = document.getElementById('messageList');
+    messageList.innerHTML = '';
+    messagesSnapshot.forEach(doc => {
+        const message = document.createElement('div');
+        message.textContent = doc.data().text;
+        messageList.appendChild(message);
+    });
 }
 
-// Calendar function
+// Clock and Calendar
+function updateClock() {
+    setInterval(() => {
+        const now = new Date();
+        document.getElementById('digitalClock').innerText = now.toLocaleTimeString('en-US', { timeZone: 'Africa/Nairobi' });
+    }, 1000);
+}
+
 function displayCalendar() {
     const now = new Date();
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    const calendar = document.getElementById('calendar');
-    calendar.innerHTML = `<h3>Today: ${now.toLocaleDateString('en-US', options)}</h3>`;
+    document.getElementById('calendar').innerText = `Today: ${now.toDateString()}`;
+}
+
+// Location Display
+function displayLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(position => {
+            const { latitude, longitude } = position.coords;
+            document.getElementById('location').innerText = `Latitude: ${latitude}, Longitude: ${longitude}`;
+        });
+    } else {
+        alert("Geolocation is not supported by this browser.");
+    }
 }
