@@ -9,6 +9,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-storage.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js"></script>
 </head>
 <body>
     <div class="container">
@@ -17,36 +18,30 @@
             <input type="password" id="pin" placeholder="Enter PIN" />
             <button id="submit-pin">Enter</button>
         </div>
+        <div id="auth-container" style="display: none;">
+            <input type="email" id="email" placeholder="Enter Your Email" required />
+            <input type="password" id="password" placeholder="Enter Password" required />
+            <button id="login-button">Login</button>
+        </div>
         <div id="content" style="display: none;">
             <h2>Upload Your Memories</h2>
             <input type="file" id="fileInput" />
             <textarea id="messageInput" placeholder="Type your message or quote here..."></textarea>
             <button id="uploadButton">Upload File</button>
             <button id="saveMessageButton">Save Message</button>
-            <h3>Your Uploaded Files:</h3>
+
             <div id="fileList"></div>
-            <h3>Your Messages:</h3>
             <div id="messageList"></div>
-            <h3>Ask a Question:</h3>
-            <input type="text" id="questionInput" placeholder="Type your question here..." />
-            <button id="askQuestionButton">Ask</button>
-            <div id="questionList"></div>
-            <h3>Favorite Quotes:</h3>
-            <div id="quotes">
-                <div class="quote" id="sharleensQuote">“We would be together and have our books and at night be warm in bed together with windows open and the stars bright.”</div>
-                <div class="quote" id="briansQuote">“...You freed me from the cage but put shackles on me with your own hands... shackles of love and tenderness💕💕.”</div>
-            </div>
-            <h3>Instagram Links:</h3>
-            <div class="instagram-links">
-                <a href="https://www.instagram.com/brian_wachiye/?__pwa=1#" target="_blank">Brian's Instagram</a>
-                <a href="https://www.instagram.com/its_sharny/?__pwa=1#" target="_blank">Sharleen's Instagram</a>
-            </div>
-            <div id="calendar"></div>
+
             <div id="digitalClock"></div>
+            <div id="calendar"></div>
+            
+            <button id="googleSignIn">Sign in with Google</button>
         </div>
-        <footer>
-            <p>&copy; 2024 Brian and Sharleen. All rights reserved.</p>
-        </footer>
+        <div id="location"></div>
     </div>
+    <footer>
+        <p>© Our Love Sanctuary,Brian & Sharlyn - All Rights Reserved 2024</p>
+    </footer>
 </body>
 </html>
