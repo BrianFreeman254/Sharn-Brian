@@ -1,7 +1,7 @@
 // Import Firebase functions
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
 import { getStorage, ref, uploadBytes, deleteObject, listAll, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-storage.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
 import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
 
 // Firebase config and initialization
@@ -19,7 +19,9 @@ const app = initializeApp(firebaseConfig);
 const storage = getStorage(app);
 const auth = getAuth(app);
 const db = getFirestore(app);
+const googleProvider = new GoogleAuthProvider();
 
+// PIN Authentication
 document.getElementById('submit-pin').onclick = function() {
     const pin = document.getElementById('pin').value;
     if (pin === '2005') {
@@ -30,25 +32,45 @@ document.getElementById('submit-pin').onclick = function() {
     }
 };
 
+// Email/Password Login
 document.getElementById('login-button').onclick = async function() {
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
-
     try {
         await signInWithEmailAndPassword(auth, email, password);
-        document.getElementById('auth-container').style.display = 'none';
-        document.getElementById('content').style.display = 'block';
-        fetchFiles();
-        loadMessages();
-        updateClock();
-        displayCalendar();
-        displayLocation();
+        loadContent();
     } catch (error) {
         alert("Authentication failed: " + error.message);
     }
 };
 
-// File upload, delete, and fetch functions
+// Google Sign-In
+document.getElementById('google-signin-button').onclick = async function() {
+    try {
+        await signInWithPopup(auth, googleProvider);
+        loadContent();
+    } catch (error) {
+        alert("Google Sign-in error: " + error.message);
+    }
+};
+
+// Common function to load authenticated content
+function loadContent() {
+    document.getElementById('auth-container').style.display = 'none';
+    document.getElementById('content').style.display = 'block';
+    fetchFiles();
+    loadMessages();
+    updateClock();
+    displayCalendar();
+    displayLocation();
+}
+
+// Handle Auth State Changes
+onAuthStateChanged(auth, (user) => {
+    if (user) loadContent();
+});
+
+// File Upload, Delete, and Fetch Functions
 document.getElementById('uploadButton').onclick = async function() {
     const fileInput = document.getElementById('fileInput');
     const file = fileInput.files[0];
@@ -60,14 +82,26 @@ document.getElementById('uploadButton').onclick = async function() {
     }
 };
 
-// Message saving and loading
+async function fetchFiles() {
+    const listRef = ref(storage, 'uploads/');
+    const res = await listAll(listRef);
+    const fileLinks = document.getElementById('fileLinks');
+    fileLinks.innerHTML = '';
+    for (const itemRef of res.items) {
+        const url = await getDownloadURL(itemRef);
+        const fileLink = document.createElement('a');
+        fileLink.href = url;
+        fileLink.textContent = itemRef.name;
+        fileLink.target = '_blank';
+        fileLinks.appendChild(fileLink);
+    }
+}
+
+// Message Saving and Loading
 document.getElementById('saveMessageButton').onclick = async function() {
     const message = document.getElementById('messageInput').value;
     if (message) {
-        await addDoc(collection(db, "messages"), {
-            text: message,
-            timestamp: new Date()
-        });
+        await addDoc(collection(db, "messages"), { text: message, timestamp: new Date() });
         document.getElementById('messageInput').value = '';
         loadMessages();
     }
