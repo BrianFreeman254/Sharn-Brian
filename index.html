@@ -3,94 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Our Love Sanctuary</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Link to external CSS for styling -->
-    <script type="module" src="script.js" defer></script>
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-storage.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js"></script>
+    <title>Our Love Sanctuary Portal</title>
+    <link rel="stylesheet" href="styles.css"> <!-- CSS for styling -->
 </head>
 <body>
-    <!-- Header Section with Organized Navigation Bar -->
     <header>
-        <h1>Our Love Sanctuary</h1>
+        <h1>Our Love Sanctuary Portal</h1>
         <nav>
             <ul>
-                <li><a href="#home">Home</a></li>
-                <li>
-                    <a href="#upload">Memories</a>
-                    <ul class="dropdown">
-                        <li><a href="#photos">Photos</a></li>
-                        <li><a href="#videos">Videos</a></li>
-                        <li><a href="#quotes">Quotes</a></li>
-                        <li><a href="#messages">Messages</a></li>
-                        <li><a href="#other-files">Other Files</a></li>
-                    </ul>
-                </li>
-                <li><a href="#location">Location</a></li>
-                <li><a href="#profile">Profile</a></li>
+                <li><a href="#upload">Upload Files</a></li>
+                <li><a href="#messages">Messages</a></li>
+                <li><a href="#gallery">Gallery</a></li>
+                <li><a href="#about">About Us</a></li>
             </ul>
         </nav>
     </header>
 
-    <main class="container">
-        <!-- PIN Authentication for Security -->
-        <section id="pin-container">
-            <h2>Security Check</h2>
-            <input type="password" id="pin" placeholder="Enter PIN" required />
-            <button id="submit-pin">Enter</button>
+    <!-- PIN Entry Section -->
+    <div id="pin-container">
+        <h2>Welcome! Enter PIN</h2>
+        <input type="password" id="pin" placeholder="Enter PIN" />
+        <button id="submit-pin">Submit</button>
+    </div>
+
+    <!-- Authentication Section -->
+    <div id="auth-container" class="hidden">
+        <h2>Sign In to Access</h2>
+        <input type="email" id="email" placeholder="Email Address" />
+        <input type="password" id="password" placeholder="Password" />
+        <button id="login-button">Sign In with Email</button>
+        <button id="googleSignIn">Sign In with Google</button>
+    </div>
+
+    <!-- Authenticated Content Section -->
+    <div id="content" class="hidden">
+        <h3>Welcome to Your Sanctuary Portal</h3>
+        <div id="calendar"></div>
+        <div id="digitalClock"></div>
+        <div id="locationInfo">Fetching location...</div>
+        
+        <section id="upload">
+            <h4>Upload and Manage Files</h4>
+            <input type="file" id="fileInput" />
+            <button id="uploadButton">Upload</button>
+            <div id="fileList"></div>
         </section>
 
-        <!-- Authentication Section with Google Sign-In and Email -->
-        <section id="auth-container" style="display: none;">
-            <h2>Login to Continue</h2>
-            <input type="email" id="email" placeholder="Enter Your Email" required />
-            <input type="password" id="password" placeholder="Enter Password" required />
-            <button id="login-button">Login</button>
-            <button id="googleSignIn">Sign in with Google</button>
+        <section id="messages">
+            <h4>Messages</h4>
+            <input type="text" id="messageInput" placeholder="Enter a message" />
+            <button id="saveMessageButton">Save Message</button>
+            <div id="messageList"></div>
         </section>
+    </div>
 
-        <!-- Content Section after Authentication -->
-        <section id="content" style="display: none;">
-            <!-- Upload Section for Files and Messages -->
-            <section id="upload">
-                <h2>Upload Your Memories</h2>
-                <input type="file" id="fileInput" />
-                <textarea id="messageInput" placeholder="Type your message or quote here..."></textarea>
-                <button id="uploadButton">Upload File</button>
-                <button id="saveMessageButton">Save Message</button>
-            </section>
-
-            <!-- Display Uploaded Files and Messages Section with Accessible Tabs -->
-            <section id="uploaded-content">
-                <h3>Your Uploaded Files</h3>
-                <div id="fileList">
-                    <!-- Each uploaded file will be shown here -->
-                </div>
-                <h3>Your Saved Messages</h3>
-                <div id="messageList">
-                    <!-- Each saved message or quote will be shown here -->
-                </div>
-            </section>
-
-            <!-- Organized Date and Time Display -->
-            <section id="date-time">
-                <div id="digitalClock"></div>
-                <div id="calendar"></div>
-            </section>
-
-            <!-- Precise Location Display -->
-            <section id="location">
-                <h3>Current Location</h3>
-                <p id="locationInfo">Fetching location...</p> <!-- Location details will populate here -->
-            </section>
-        </section>
-    </main>
-
-    <!-- Footer with Copyright -->
-    <footer>
-        <p>© 2024 Our Love Sanctuary, Brian & Sharlyn - All Rights Reserved</p>
-    </footer>
+    <!-- Firebase and JavaScript -->
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
