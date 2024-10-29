@@ -12,35 +12,79 @@
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js"></script>
 </head>
 <body>
-    <div class="container">
+    <!-- Header Section with Navigation Bar -->
+    <header>
         <h1>Welcome to Our Love Sanctuary</h1>
-        <div id="pin-container">
-            <input type="password" id="pin" placeholder="Enter PIN" />
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li>
+                    <a href="#upload">Memories</a>
+                    <ul class="dropdown">
+                        <li><a href="#photos">Photos</a></li>
+                        <li><a href="#videos">Videos</a></li>
+                        <li><a href="#quotes">Quotes</a></li>
+                        <li><a href="#messages">Messages</a></li>
+                        <li><a href="#other-files">Other Files</a></li>
+                    </ul>
+                </li>
+                <li><a href="#location">Location</a></li>
+                <li><a href="#profile">Profile</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        <!-- PIN Authentication -->
+        <section id="pin-container">
+            <h2>Security Check</h2>
+            <input type="password" id="pin" placeholder="Enter PIN" required />
             <button id="submit-pin">Enter</button>
-        </div>
-        <div id="auth-container" style="display: none;">
+        </section>
+
+        <!-- Authentication Section (Email & Google Sign-In) -->
+        <section id="auth-container" style="display: none;">
+            <h2>Login to Continue</h2>
             <input type="email" id="email" placeholder="Enter Your Email" required />
             <input type="password" id="password" placeholder="Enter Password" required />
             <button id="login-button">Login</button>
-            <button id="googleSignIn">Sign in with Google</button> <!-- Google Sign-In button -->
-        </div>
-        <div id="content" style="display: none;">
-            <h2>Upload Your Memories</h2>
-            <input type="file" id="fileInput" />
-            <textarea id="messageInput" placeholder="Type your message or quote here..."></textarea>
-            <button id="uploadButton">Upload File</button>
-            <button id="saveMessageButton">Save Message</button>
+            <button id="googleSignIn">Sign in with Google</button>
+        </section>
 
-            <div id="fileList"></div>
-            <div id="messageList"></div>
+        <!-- Content Section after Authentication -->
+        <section id="content" style="display: none;">
+            <!-- Upload Section -->
+            <section id="upload">
+                <h2>Upload Your Memories</h2>
+                <input type="file" id="fileInput" />
+                <textarea id="messageInput" placeholder="Type your message or quote here..."></textarea>
+                <button id="uploadButton">Upload File</button>
+                <button id="saveMessageButton">Save Message</button>
+            </section>
 
-            <div id="digitalClock"></div>
-            <div id="calendar"></div>
-        </div>
-        <div id="location"></div>
-    </div>
+            <!-- Display Uploaded Files and Messages -->
+            <section id="uploaded-content">
+                <div id="fileList"></div>
+                <div id="messageList"></div>
+            </section>
+
+            <!-- Date and Time Display -->
+            <section id="date-time">
+                <div id="digitalClock"></div>
+                <div id="calendar"></div>
+            </section>
+
+            <!-- Location Display -->
+            <section id="location">
+                <h3>Current Location</h3>
+                <p id="locationInfo">Fetching location...</p>
+            </section>
+        </section>
+    </main>
+
+    <!-- Footer Section -->
     <footer>
-        <p>© Our Love Sanctuary, Brian & Sharlyn - All Rights Reserved 2024</p>
+        <p>© 2024 Our Love Sanctuary, Brian & Sharlyn - All Rights Reserved</p>
     </footer>
 </body>
 </html>
