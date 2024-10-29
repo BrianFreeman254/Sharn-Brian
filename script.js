@@ -1,158 +1,156 @@
-// Import Firebase functions
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
-import { getStorage, ref, uploadBytes, listAll, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-storage.js";
-import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
-import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Personal Web Portal</title>
+    <style>
+        /* Layout Styling */
+        body {
+            font-family: Arial, sans-serif;
+            background: #f9f9f9;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        #pin-container, #auth-container, #content {
+            max-width: 600px;
+            width: 100%;
+            padding: 20px;
+            margin: 10px;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .hidden { display: none; }
+        button, input {
+            margin: 8px 0;
+            padding: 10px;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #0069d9;
+            color: white;
+            cursor: pointer;
+        }
+        #fileList a {
+            display: block;
+            margin: 5px 0;
+            color: #0069d9;
+        }
+        #messageList div {
+            padding: 8px;
+            margin-top: 5px;
+            background: #e9e9e9;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- PIN Entry Section -->
+    <div id="pin-container">
+        <h2>Enter PIN</h2>
+        <input type="password" id="pin" placeholder="Enter PIN" />
+        <button id="submit-pin">Submit PIN</button>
+    </div>
 
-// Firebase config and initialization
-const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_AUTH_DOMAIN",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_STORAGE_BUCKET",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID",
-    measurementId: "YOUR_MEASUREMENT_ID"
-};
+    <!-- Authentication Section -->
+    <div id="auth-container" class="hidden">
+        <h2>Sign In</h2>
+        <input type="email" id="email" placeholder="Email Address" />
+        <input type="password" id="password" placeholder="Password" />
+        <button id="login-button">Sign In with Email</button>
+        <button id="googleSignIn">Sign In with Google</button>
+    </div>
 
-const app = initializeApp(firebaseConfig);
-const storage = getStorage(app);
-const auth = getAuth(app);
-const db = getFirestore(app);
-const googleProvider = new GoogleAuthProvider();
+    <!-- Authenticated Content Section -->
+    <div id="content" class="hidden">
+        <h3>Welcome to Your Portal</h3>
+        <div id="calendar"></div>
+        <div id="digitalClock"></div>
+        <div id="locationInfo"></div>
+        <hr>
+        
+        <!-- File Upload and Display -->
+        <h4>Upload and Manage Files</h4>
+        <input type="file" id="fileInput" />
+        <button id="uploadButton">Upload File</button>
+        <div id="fileList"></div>
 
-// PIN Authentication
-document.getElementById('submit-pin').onclick = function() {
-    const pin = document.getElementById('pin').value;
-    if (pin === '2005') {
-        document.getElementById('pin-container').style.display = 'none';
-        document.getElementById('auth-container').style.display = 'block';
-    } else {
-        alert('Incorrect PIN. Please try again.');
-    }
-};
+        <!-- Messages -->
+        <h4>Messages</h4>
+        <input type="text" id="messageInput" placeholder="Enter a message" />
+        <button id="saveMessageButton">Save Message</button>
+        <div id="messageList"></div>
+    </div>
 
-// Email/Password Login
-document.getElementById('login-button').onclick = async function() {
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    try {
-        await signInWithEmailAndPassword(auth, email, password);
-        loadContent();
-    } catch (error) {
-        alert("Authentication failed: " + error.message);
-    }
-};
+    <!-- Firebase Configuration -->
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js"></script>
 
-// Google Sign-In
-document.getElementById('googleSignIn').onclick = async function() {
-    try {
-        await signInWithPopup(auth, googleProvider);
-        loadContent();
-    } catch (error) {
-        alert("Google Sign-in error: " + error.message);
-    }
-};
+    <!-- JavaScript Functionality -->
+    <script>
+        // Firebase Initialization (add config and setup as provided in your code)
 
-// Function to load authenticated content
-function loadContent() {
-    document.getElementById('auth-container').style.display = 'none';
-    document.getElementById('content').style.display = 'block';
-    fetchFiles();
-    loadMessages();
-    updateClock();
-    displayCalendar();
-    displayLocation();
-}
+        // PIN Authentication
+        document.getElementById('submit-pin').onclick = function() {
+            const pin = document.getElementById('pin').value;
+            if (pin === '2005') {
+                document.getElementById('pin-container').classList.add('hidden');
+                document.getElementById('auth-container').classList.remove('hidden');
+            } else {
+                alert('Incorrect PIN. Please try again.');
+            }
+        };
 
-// Handle Auth State Changes
-onAuthStateChanged(auth, (user) => {
-    if (user) loadContent();
-});
+        // Email/Password Login
+        document.getElementById('login-button').onclick = async function() {
+            // Add signInWithEmailAndPassword logic and loadContent
+        };
 
-// File Upload, Delete, and Fetch Functions
-document.getElementById('uploadButton').onclick = async function() {
-    const fileInput = document.getElementById('fileInput');
-    const file = fileInput.files[0];
-    if (file) {
-        const storageRef = ref(storage, 'uploads/' + file.name);
-        await uploadBytes(storageRef, file);
-        alert('File uploaded successfully!');
-        fetchFiles();
-    }
-};
+        // Google Sign-In
+        document.getElementById('googleSignIn').onclick = async function() {
+            // Add signInWithPopup logic and loadContent
+        };
 
-// Fetch and display files in organized tabs
-async function fetchFiles() {
-    const listRef = ref(storage, 'uploads/');
-    const res = await listAll(listRef);
-    const fileLinks = document.getElementById('fileList');
-    fileLinks.innerHTML = '';
-    for (const itemRef of res.items) {
-        const url = await getDownloadURL(itemRef);
-        const fileLink = document.createElement('a');
-        fileLink.href = url;
-        fileLink.textContent = itemRef.name;
-        fileLink.target = '_blank';
-        fileLinks.appendChild(fileLink);
-    }
-}
+        function loadContent() {
+            document.getElementById('auth-container').classList.add('hidden');
+            document.getElementById('content').classList.remove('hidden');
+            fetchFiles();
+            loadMessages();
+            updateClock();
+            displayCalendar();
+            displayLocation();
+        }
 
-// Message Saving and Loading
-document.getElementById('saveMessageButton').onclick = async function() {
-    const message = document.getElementById('messageInput').value;
-    if (message) {
-        await addDoc(collection(db, "messages"), { text: message, timestamp: new Date() });
-        document.getElementById('messageInput').value = '';
-        loadMessages();
-    }
-};
+        function fetchFiles() {
+            // File fetching and display logic
+        }
 
-async function loadMessages() {
-    const messagesSnapshot = await getDocs(collection(db, "messages"));
-    const messageList = document.getElementById('messageList');
-    messageList.innerHTML = '';
-    messagesSnapshot.forEach(doc => {
-        const message = document.createElement('div');
-        message.textContent = doc.data().text;
-        messageList.appendChild(message);
-    });
-}
+        function loadMessages() {
+            // Message loading logic
+        }
 
-// Clock and Calendar
-function updateClock() {
-    setInterval(() => {
-        const now = new Date();
-        document.getElementById('digitalClock').innerText = now.toLocaleTimeString('en-US', { timeZone: 'Africa/Nairobi' });
-    }, 1000);
-}
+        function updateClock() {
+            setInterval(() => {
+                const now = new Date();
+                document.getElementById('digitalClock').innerText = now.toLocaleTimeString();
+            }, 1000);
+        }
 
-function displayCalendar() {
-    const now = new Date();
-    document.getElementById('calendar').innerText = `Today: ${now.toDateString()}`;
-}
+        function displayCalendar() {
+            const now = new Date();
+            document.getElementById('calendar').innerText = `Today: ${now.toDateString()}`;
+        }
 
-// Location Display with Place Name
-function displayLocation() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(async position => {
-            const { latitude, longitude } = position.coords;
-            const locationName = await getLocationName(latitude, longitude); // Function to get precise place name
-            document.getElementById('locationInfo').innerText = locationName || `Latitude: ${latitude}, Longitude: ${longitude}`;
-        });
-    } else {
-        alert("Geolocation is not supported by this browser.");
-    }
-}
-
-// Helper function to convert latitude and longitude to place name
-async function getLocationName(lat, long) {
-    try {
-        const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${long}`);
-        const data = await response.json();
-        return data.display_name;
-    } catch (error) {
-        console.error("Error fetching location name:", error);
-        return null;
-    }
-}
+        function displayLocation() {
+            // Location fetching logic
+        }
+    </script>
+</body>
+</html>
