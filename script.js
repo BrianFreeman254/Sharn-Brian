@@ -1,18 +1,18 @@
 // Import Firebase functions
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
-import { getStorage, ref, uploadBytes, deleteObject, listAll, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-storage.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
-import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, listAll, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-storage.js";
+import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
+import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
 
 // Firebase config and initialization
 const firebaseConfig = {
-    apiKey: "AIzaSyDCY8rufFnmvmvW5QMF989chBEZbF6ytOg",
-    authDomain: "myapp-32598.firebaseapp.com",
-    projectId: "myapp-32598",
-    storageBucket: "myapp-32598.appspot.com",
-    messagingSenderId: "349027005",
-    appId: "1:349027005:web:3c3e13461b93aa3b9355d4",
-    measurementId: "G-K9X4PVX4C7"
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_AUTH_DOMAIN",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_STORAGE_BUCKET",
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+    appId: "YOUR_APP_ID",
+    measurementId: "YOUR_MEASUREMENT_ID"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -45,7 +45,7 @@ document.getElementById('login-button').onclick = async function() {
 };
 
 // Google Sign-In
-document.getElementById('google-signin-button').onclick = async function() {
+document.getElementById('googleSignIn').onclick = async function() {
     try {
         await signInWithPopup(auth, googleProvider);
         loadContent();
@@ -54,7 +54,7 @@ document.getElementById('google-signin-button').onclick = async function() {
     }
 };
 
-// Common function to load authenticated content
+// Function to load authenticated content
 function loadContent() {
     document.getElementById('auth-container').style.display = 'none';
     document.getElementById('content').style.display = 'block';
@@ -82,10 +82,11 @@ document.getElementById('uploadButton').onclick = async function() {
     }
 };
 
+// Fetch and display files in organized tabs
 async function fetchFiles() {
     const listRef = ref(storage, 'uploads/');
     const res = await listAll(listRef);
-    const fileLinks = document.getElementById('fileLinks');
+    const fileLinks = document.getElementById('fileList');
     fileLinks.innerHTML = '';
     for (const itemRef of res.items) {
         const url = await getDownloadURL(itemRef);
@@ -131,14 +132,27 @@ function displayCalendar() {
     document.getElementById('calendar').innerText = `Today: ${now.toDateString()}`;
 }
 
-// Location Display
+// Location Display with Place Name
 function displayLocation() {
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(position => {
+        navigator.geolocation.getCurrentPosition(async position => {
             const { latitude, longitude } = position.coords;
-            document.getElementById('location').innerText = `Latitude: ${latitude}, Longitude: ${longitude}`;
+            const locationName = await getLocationName(latitude, longitude); // Function to get precise place name
+            document.getElementById('locationInfo').innerText = locationName || `Latitude: ${latitude}, Longitude: ${longitude}`;
         });
     } else {
         alert("Geolocation is not supported by this browser.");
+    }
+}
+
+// Helper function to convert latitude and longitude to place name
+async function getLocationName(lat, long) {
+    try {
+        const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${long}`);
+        const data = await response.json();
+        return data.display_name;
+    } catch (error) {
+        console.error("Error fetching location name:", error);
+        return null;
     }
 }
