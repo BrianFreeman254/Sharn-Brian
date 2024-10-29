@@ -1,171 +1,63 @@
-/* General Styles */
 body {
     font-family: Arial, sans-serif;
     background-color: #f0f8ff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     color: #333;
-    margin: 0;
+}
+
+header {
+    background-color: #0069d9;
+    color: white;
+    padding: 10px 0;
+    width: 100%;
+    text-align: center;
+}
+
+nav ul {
+    list-style-type: none;
     padding: 0;
 }
 
-/* Container */
-.container {
-    max-width: 800px;
-    margin: 50px auto;
+nav ul li {
+    display: inline;
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+#pin-container, #auth-container, #content {
+    max-width: 600px;
+    width: 90%;
     padding: 20px;
+    margin-top: 10px;
     background-color: white;
     border-radius: 8px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-h1, h2 {
-    color: #333;
-    text-align: center;
-    margin-top: 0;
-}
-
-/* Dropdown Menu Styles */
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
-}
-
-.navbar .dropdown {
-    position: relative;
-    display: inline-block;
-}
-
-.navbar .dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: white;
-    min-width: 160px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    z-index: 1;
-    border-radius: 4px;
-}
-
-.navbar .dropdown:hover .dropdown-content {
-    display: block;
-}
-
-.navbar .dropdown-content a {
-    color: #333;
-    padding: 10px 20px;
-    text-decoration: none;
-    display: block;
-}
-
-.navbar .dropdown-content a:hover {
-    background-color: #f0f8ff;
-}
-
-/* Input and Button Styles */
-input[type="email"],
-input[type="password"],
-input[type="file"],
-textarea {
+button, input[type="email"], input[type="password"], input[type="file"], input[type="text"] {
     width: 100%;
-    padding: 12px;
+    padding: 10px;
     margin: 10px 0;
+    border-radius: 5px;
     border: 1px solid #ccc;
-    border-radius: 4px;
 }
 
 button {
-    background-color: #007bff;
+    background-color: #0069d9;
     color: white;
-    padding: 12px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-    width: 100%;
-    margin-top: 10px;
-}
-
-button:hover {
-    background-color: #0056b3;
-}
-
-/* Google Sign-In Button */
-#googleSignIn {
-    background-color: #4285F4; /* Google Blue */
-}
-
-#googleSignIn:hover {
-    background-color: #357AE8;
-}
-
-/* File Upload Section */
-.file-section {
-    background-color: #f9f9f9;
-    padding: 20px;
-    border-radius: 4px;
-    margin: 20px 0;
-}
-
-.file-section h3 {
-    color: #333;
-}
-
-.file-list {
-    list-style-type: none;
-    padding: 0;
-    margin: 10px 0;
-}
-
-.file-list li {
-    margin: 5px 0;
-}
-
-/* Organized Tab Structure */
-.tab-container {
-    display: flex;
-    border-bottom: 2px solid #007bff;
-    margin-bottom: 20px;
-}
-
-.tab-container button {
-    flex: 1;
-    padding: 12px;
-    cursor: pointer;
-    background-color: white;
-    border: none;
-    outline: none;
     font-weight: bold;
 }
 
-.tab-container button.active {
-    background-color: #007bff;
-    color: white;
-}
-
-/* Auth and Content Display */
-#content, #auth-container {
+.hidden {
     display: none;
 }
 
-/* Clock, Calendar, and Location Display */
-#digitalClock, #calendar {
-    font-weight: bold;
-    margin: 10px 0;
+h2, h3, h4 {
     text-align: center;
-}
-
-#location {
-    margin-top: 20px;
-    font-style: italic;
-    text-align: center;
-}
-
-/* Footer */
-footer {
-    text-align: center;
-    margin-top: 20px;
-    color: #777;
-    font-size: 14px;
 }
